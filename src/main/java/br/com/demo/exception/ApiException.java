@@ -5,14 +5,14 @@ package br.com.demo.exception;
  */
 public class ApiException extends RuntimeException {
 
-    private long status;
+    private int status;
 
-    public ApiException(long status, String message) {
+    public ApiException(int status, String message) {
         super(message);
         this.status = status;
     }
 
-    public long getStatus() {
+    public int getStatus() {
         return status;
     }
 }

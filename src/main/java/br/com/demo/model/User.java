@@ -1,17 +1,17 @@
 package br.com.demo.model;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 /**
  * Created by renan on 9/29/16.
  */
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class User {
 
     @Id
@@ -25,8 +25,8 @@ public class User {
 
     @NotNull(message = "{required_field}")
     @NotBlank(message = "{not_empty_field}")
-    @Pattern(regexp=".+@.+\\.[a-z]+")
-    @Column(name = "email", nullable = false, unique = true)
+    @Email
+    @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull(message = "{required_field}")

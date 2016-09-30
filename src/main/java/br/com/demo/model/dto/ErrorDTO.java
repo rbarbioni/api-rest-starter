@@ -5,18 +5,26 @@ package br.com.demo.model.dto;
  */
 public class ErrorDTO {
 
-    private long status = 500;
-
-    private String[] errors;
+    private int status = 500;
 
     private String message;
 
-    public ErrorDTO(long status, String message) {
+    private String path;
+
+    private String[] errors;
+
+    public ErrorDTO(int status, String message, String path) {
         this.status = status;
         this.message = message;
+        this.path = path;
     }
 
-    public long getStatus() {
+    public ErrorDTO(int status, String message, String path, String[] errors) {
+        this(status, message, path);
+        this.errors = errors;
+    }
+
+    public int getStatus() {
         return status;
     }
 
@@ -30,5 +38,9 @@ public class ErrorDTO {
 
     public void setErrors(String[] errors) {
         this.errors = errors;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
