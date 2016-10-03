@@ -6,4 +6,6 @@ package br.com.demo;
 public class Constants {
 
     public static final String API = "/api";
+
+    public static final String NOT_FOUND_404 = "Not Found";
 }

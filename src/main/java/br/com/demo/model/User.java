@@ -1,37 +1,38 @@
 package br.com.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-
-/**
- * Created by renan on 9/29/16.
- */
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
-public class User {
+public class User extends DomainEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private static final long serialVersionUID = 280849381809891638L;
 
     @NotNull(message = "{NotNull.user.name}")
     @NotBlank(message = "{NotBlank.user.name}")
     @Column(name = "name", nullable = false)
+    @JsonProperty("name")
     private String name;
 
-    @NotNull(message = "{required_field}")
-    @NotBlank(message = "{not_empty_field}")
+    @NotNull(message = "{NotNull.user.email}")
+    @NotBlank(message = "{NotBlank.user.email}")
     @Email
     @Column(name = "email", nullable = false)
+    @JsonProperty("email")
     private String email;
 
-    @NotNull(message = "{required_field}")
-    @NotBlank(message = "{not_empty_field}")
+    @NotNull(message = "{NotNull.user.password}")
+    @NotBlank(message = "{NotBlank.user.password}")
     @Column(name = "password", nullable = false)
+    @JsonProperty("password")
     private String password;
 
     public User(){
@@ -45,10 +46,6 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
@@ -60,4 +57,5 @@ public class User {
     public String getPassword() {
         return password;
     }
+
 }

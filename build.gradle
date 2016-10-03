@@ -29,7 +29,7 @@ repositories {
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-
+	compile ('org.apache.commons:commons-lang3:3.4')
 	runtime 'org.hsqldb:hsqldb:2.3.4'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

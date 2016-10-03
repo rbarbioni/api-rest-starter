@@ -1,7 +1,9 @@
 package br.com.demo.controller;
 
-import br.com.demo.exception.ApiException;
+import br.com.demo.exception.ApplicationException;
 import br.com.demo.model.dto.ErrorDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
@@ -26,12 +28,17 @@ import java.util.Locale;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final String ERROR = "ERROR";
+
     @Autowired
     private MessageSource messageSource;
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     @ResponseBody
     public ErrorDTO onValidation(MethodArgumentNotValidException ex, HttpServletRequest request, HttpServletResponse response) {
+
+        log.error(ERROR, ex);
 
         ErrorDTO errorDTO = new ErrorDTO(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage(), request.getRequestURI());
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -58,9 +65,11 @@ public class GlobalExceptionHandler {
         return errorDTO;
     }
 
-    @ExceptionHandler(value = {ApiException.class})
+    @ExceptionHandler(value = {ApplicationException.class})
     @ResponseBody
-    public ErrorDTO onApiException(ApiException ex, HttpServletRequest request, HttpServletResponse response) {
+    public ErrorDTO onApiException(ApplicationException ex, HttpServletRequest request, HttpServletResponse response) {
+        log.error(ERROR, ex);
+
         response.setStatus(ex.getStatus());
         return new ErrorDTO(ex.getStatus(), ex.getMessage(), request.getRequestURI());
     }
@@ -68,6 +77,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {SQLException.class, DataAccessException.class})
     @ResponseBody
     public ErrorDTO onDatabaseException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        log.error(ERROR, ex);
+
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
         if(ex instanceof DataIntegrityViolationException){
             DataIntegrityViolationException exception = (DataIntegrityViolationException) ex;
@@ -81,6 +93,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     public ErrorDTO onGenericException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        log.error(ERROR, ex);
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return new ErrorDTO(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), request.getRequestURI());
     }

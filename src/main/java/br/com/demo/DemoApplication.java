@@ -24,8 +24,6 @@ public class DemoApplication {
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 		objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-
 		return objectMapper;
 	}
-
 }
