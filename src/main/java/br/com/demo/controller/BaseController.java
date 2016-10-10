@@ -16,40 +16,39 @@ import java.util.List;
  */
 public abstract class BaseController<T extends DomainEntity> {
 
-    private BaseService<T> baseService;
+    private final Controller controller;
 
     public BaseController(BaseService<T> baseService) {
-        this.baseService = baseService;
+        this.controller = new Controller(baseService);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public T get(@PathVariable Long id){
-        return this.baseService.findOneThrowException(id);
+        return (T) this.controller.getObject(id);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<T> get(){
-        return this.baseService.findAll();
+        return this.controller.getObjects();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public T post (@Valid @RequestBody T object){
-        return this.baseService.save(object);
+        return (T) this.controller.postObject(object);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public T put (@PathVariable Long id, @Valid @RequestBody T object){
-        return this.baseService.update(object);
+        return (T) this.controller.putObject(id, object);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete (@PathVariable Long id){
-        this.baseService.delete(id);
+        this.controller.deleteObject(id);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public List<T> search(HttpServletRequest request){
-        return this.baseService.search(request);
+        return this.controller.searchObjects(request);
     }
-
 }

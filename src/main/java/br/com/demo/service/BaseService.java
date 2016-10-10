@@ -2,6 +2,8 @@ package br.com.demo.service;
 
 import br.com.demo.exception.DatabaseException;
 import br.com.demo.model.DomainEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityManager;
@@ -60,12 +62,20 @@ public abstract class BaseService<T extends DomainEntity> {
         return this.jpaRepository.findAll();
     }
 
+    public Page<T> findAll(Pageable pageable){
+        return this.jpaRepository.findAll(pageable);
+    }
+
     public T findByOne(T object){
         return this.jpaRepository.getOne(object.getId());
     }
 
     public T findByOne(Long id){
         return this.jpaRepository.getOne(id);
+    }
+
+    public Page<T> search(HttpServletRequest request, Pageable pageable){
+        return null;
     }
 
     public List<T> search(HttpServletRequest request){
